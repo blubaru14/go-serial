@@ -16,7 +16,7 @@ import (
 	"sync/atomic"
 	"time"
 
-	"go.bug.st/serial/unixutils"
+	"github.com/blubaru14/go-serial/unixutils"
 	"golang.org/x/sys/unix"
 )
 
@@ -27,6 +27,17 @@ type unixPort struct {
 	closeLock   sync.RWMutex
 	closeSignal *unixutils.Pipe
 	opened      uint32
+}
+
+// Open opens the serial port using the specified modes and also returns the unix fd.
+func OpenFd(portName string, mode *Mode) (int, Port, error) {
+	port, err := nativeOpen(portName, mode)
+	if err != nil {
+		// Return a nil interface, for which var==nil is true (instead of
+		// a nil pointer to a struct that satisfies the interface).
+		return -1, nil, err
+	}
+	return port.handle, port, err
 }
 
 func (port *unixPort) Close() error {

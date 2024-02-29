@@ -78,7 +78,7 @@ type ModemOutputBits struct {
 	DTR bool // DataTerminalReady status
 }
 
-// Open opens the serial port using the specified modes
+// Open opens the serial port using the specified modes.
 func Open(portName string, mode *Mode) (Port, error) {
 	port, err := nativeOpen(portName, mode)
 	if err != nil {
